@@ -23,6 +23,12 @@ describe Base58::Int do
     it "decodes an empty input" do
       Base58::Int.decode("").should eq(0)
     end
+
+    it "fails to decode an invalid base58 string" do
+      expect_raises(Base58::DecodingError) do
+        Base58::Int.decode("nh?")
+      end
+    end
   end
 
   describe ".encode" do
