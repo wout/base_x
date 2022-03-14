@@ -6,11 +6,11 @@ TODO: Write a description here
 
 1. Add the dependency to your `shard.yml`:
 
-   ```yaml
-   dependencies:
-     base58:
-       github: your-github-user/base58
-   ```
+```yaml
+dependencies:
+  base58:
+    github: wout/base58
+```
 
 2. Run `shards install`
 
@@ -28,7 +28,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/base58/fork>)
+1. Fork it (<https://github.com/wout/base58/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -36,4 +36,4 @@ TODO: Write development instructions here
 
 ## Contributors
 
-- [Wout](https://github.com/your-github-user) - creator and maintainer
+- [Wout](https://github.com/wout) - creator and maintainer
