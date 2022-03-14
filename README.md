@@ -3,6 +3,10 @@
 A Crystal shard for converting integers, bytes or binary-encoded strings, to and
 from Base58 using common alphabets.
 
+![GitHub](https://img.shields.io/github/license/wout/base58)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/base58)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/base58/Base58%20CI)
+
 ## What is Base58?
 
 From [Wikipedia](https://en.wikipedia.org/wiki/Base58):
