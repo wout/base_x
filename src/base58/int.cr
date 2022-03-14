@@ -5,10 +5,10 @@ module Base58::Int
   def self.decode(
     str : String,
     alphabet = DEFAULT
-  ) : Number
+  ) : BigInt
     str.reverse.chars.map_with_index do |char, index|
       unless char_index = alphabet.index(char)
-        raise DecodingError.new("Value passed not a valid Base58 String")
+        raise DecodingError.new("Value passed is not a valid Base58 String")
       end
 
       char_index.to_big_i * (BASE.to_big_i ** index.to_big_i)
