@@ -43,5 +43,47 @@ describe Base58::Binary do
         Base58::Binary.encode(decoded, Base58::RIPPLE).should eq(encoded)
       end
     end
+
+    it "handles leading zeroes correctly with the default alphabet" do
+      LEADING_ZEROES_EXAMPLES[:default].each do |example|
+        bin = String.new(example[:hex].hexbytes)
+        bin_no_zeroes = bin.gsub(/^#{"\u0000"}*/, "")
+
+        Base58::Binary.encode(bin)
+          .should eq(example[:b58])
+        Base58::Binary.encode(bin, leading_zeroes: false)
+          .should eq(example[:b58_no_zeroes])
+        Base58::Binary.encode(bin_no_zeroes)
+          .should eq(example[:b58_no_zeroes])
+      end
+    end
+
+    it "handles leading zeroes correctly with the bitcoin alphabet" do
+      LEADING_ZEROES_EXAMPLES[:bitcoin].each do |example|
+        bin = String.new(example[:hex].hexbytes)
+        bin_no_zeroes = bin.gsub(/^#{"\u0000"}*/, "")
+
+        Base58::Binary.encode(bin, Base58::BITCOIN)
+          .should eq(example[:b58])
+        Base58::Binary.encode(bin, Base58::BITCOIN, false)
+          .should eq(example[:b58_no_zeroes])
+        Base58::Binary.encode(bin_no_zeroes, Base58::BITCOIN)
+          .should eq(example[:b58_no_zeroes])
+      end
+    end
+
+    it "handles leading zeroes correctly with the ripple alphabet" do
+      LEADING_ZEROES_EXAMPLES[:ripple].each do |example|
+        bin = String.new(example[:hex].hexbytes)
+        bin_no_zeroes = bin.gsub(/^#{"\u0000"}*/, "")
+
+        Base58::Binary.encode(bin, Base58::RIPPLE)
+          .should eq(example[:b58])
+        Base58::Binary.encode(bin, Base58::RIPPLE, false)
+          .should eq(example[:b58_no_zeroes])
+        Base58::Binary.encode(bin_no_zeroes, Base58::RIPPLE)
+          .should eq(example[:b58_no_zeroes])
+      end
+    end
   end
 end
