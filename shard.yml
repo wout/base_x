@@ -1,0 +1,17 @@
+name: base58
+version: 0.1.0
+
+authors:
+  - Wout <hi@wout.codes>
+
+crystal: 1.3.0
+
+license: MIT
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 0.14.3
+  spec_mirror:
+    github: wout/spec_mirror.cr
+    branch: master
