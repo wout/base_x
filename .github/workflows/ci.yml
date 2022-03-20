@@ -1,4 +1,4 @@
-name: Base58 CI
+name: BaseX CI
 
 on:
   push:

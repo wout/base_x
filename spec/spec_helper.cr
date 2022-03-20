@@ -1,3 +1,3 @@
 require "spec"
 require "./examples/**"
-require "../src/base58"
+require "../src/base_x"

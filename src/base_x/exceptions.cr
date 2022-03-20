@@ -1,4 +1,4 @@
-module Base58
+module BaseX
   class DecodingError < Exception
   end
 end

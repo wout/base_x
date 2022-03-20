@@ -1,25 +1,28 @@
-# Base58
+# BaseX
 
-A Crystal shard for converting integers, bytes or binary-encoded strings, to and
-from Base58 using common alphabets.
+A Crystal shard for base encoding / decoding of any given alphabet with optional
+bitcoin-style leading zero compression.
 
-![GitHub](https://img.shields.io/github/license/wout/base58)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/base58)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/base58/Base58%20CI)
+![GitHub](https://img.shields.io/github/license/wout/base_x)
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/base_x)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/base_x/BaseX%20CI)
 
-## What is Base58?
+## Supported alphabets
 
-From [Wikipedia](https://en.wikipedia.org/wiki/Base58):
-
-> Base58 is a group of binary-to-text encoding schemes used to represent large
-> integers as alphanumeric text. It is similar to Base64 but has been modified
-> to avoid both non-alphanumeric characters and letters which might look
-> ambiguous when printed. It is therefore designed for human users who manually
-> enter the data, copying from some visual source, but also allows easy copy and
-> paste because a double-click will usually select the whole string.
-
-Base58 alphabets are made up of the characters a-z, A-Z, and 0-9, with visually
-ambiguous characters (0, O, I, l) removed.
+Base | Alphabet
+------------- | -------------
+2 | `01`
+8 | `01234567`
+11 | `0123456789a`
+32 | `0123456789ABCDEFGHJKMNPQRSTVWXYZ`
+32 | `ybndrfg8ejkmcpqxot1uwisza345h769` (z-base-32)
+36 | `0123456789abcdefghijklmnopqrstuvwxyz`
+45 | `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:`
+58 | `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz` (bitcoin)
+58 | `123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ` (flickr)
+58 | `rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz` (ripple)
+62 | `0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`
+67 | `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~`
 
 ## Installation
 
@@ -27,8 +30,8 @@ ambiguous characters (0, O, I, l) removed.
 
 ```yaml
 dependencies:
-  base58:
-    github: wout/base58
+  base_x:
+    github: wout/base_x
 ```
 
 2. Run `shards install`
@@ -36,70 +39,50 @@ dependencies:
 ## Usage
 
 ```crystal
-require "base58"
+require "base_x"
 ```
 
 ### Converting integers
 
 ```crystal
-Base58::Int.decode("6hKMCS")
+BaseX::Base58.decode_int("6hKMCS")
 # => 3471391110
-Base58::Int.encode(3471391110)
+BaseX::Base58.encode(3471391110)
 # => "6hKMCS"
 ```
 
 ### Converting bytes
 
 ```crystal
-Base58::Bytes.decode("6hKMCS")
+BaseX::Base58.decode("6hKMCS")
 # => Bytes[206, 233, 57, 134]
-Base58::Bytes.encode(Bytes[206, 233, 57, 134])
+BaseX::Base58.encode(Bytes[206, 233, 57, 134])
 # => "6hKMCS"
 ```
 
-### Converting binary-encoded strings
+**Note**: `BaseX::Base58.decode` is the same as `BaseX::Base58.decode_bytes`.
+
+### Using other alphabets
 
 ```crystal
-Base58::Binary.decode("6hKMCS")
-# => "\xCE\xE99\x86"
-Base58::Binary.encode("\xCE\xE99\x86")
-# => "6hKMCS"
+base_16_alphabet = "0123456789abcdef"
+BaseX::Base.decode("ff3300", base_16_alphabet)
+# => Bytes[255, 51, 0]
+BaseX::Base.encode(Bytes[255, 51, 0], base_16_alphabet)
+# => "ff3300"
 ```
-
-### Using different alphabets
-
-The default alphabet is the one used by Flickr:
-
-```crystal
-"123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-```
-
-But another alphabet can be used by passing it as the second parameter:
-
-```crystal
-Base58::Bytes.decode("6Hknds", alphabet: Base58::BITCOIN)
-# => Bytes[206, 233, 57, 134]
-Base58::Bytes.encode(Bytes[206, 233, 57, 134], alphabet: Base58::BITCOIN)
-# => "6Hknds"
-```
-
-Supported alphabets are:
-
-- `Base58::DEFAULT`: (`123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ`)
-- `Base58::BITCOIN`: (`123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`)
-- `Base58::RIPPLE`: (`rpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2bcdeCg65jkm8oFqi1tuvAxyz`)
 
 ### Leading zeroes
 
 Some protocols, such as Bitcoin, require leading zeros to be encoded. Passing
-`true` to the third argument of `Base58::Bytes.encode` or
-`Base58::Binary.encode` will enable this behaviour.
+`true` to the third argument of `BaseX::Bytes.encode` or
+`BaseX::Binary.encode` will enable this behaviour.
 
 ```crystal
 bitcoin_address_hex = "00000000000000000000123456789ABCDEF0"
 bitcoin_address_bytes = String.new(bitcoin_address_hex.hexbytes)
 
-Base58::Bytes.encode(bitcoin_address_bytes, Base58::BITCOIN, true)
+BaseX::Base58.encode(bitcoin_address_bytes, leading_zeroes: true)
 # => 111111111143c9JGph3DZ
 ```
 
@@ -118,7 +101,7 @@ This will automatically:
 
 ## Contributing
 
-1. Fork it (<https://github.com/wout/base58/fork>)
+1. Fork it (<https://github.com/wout/base_x/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -131,5 +114,5 @@ This will automatically:
 ## Acknowledgements
 This shard pulls inpiration from the following projects:
 - [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x)
-- [dougal/base58](https://github.com/dougal/base58)
-- [russ/base58](https://github.com/russ/base58)
+- [dougal/base_x](https://github.com/dougal/base_x)
+- [russ/base_x](https://github.com/russ/base_x)
