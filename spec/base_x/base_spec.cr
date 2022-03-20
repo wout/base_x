@@ -16,12 +16,12 @@ describe BaseX::Base do
 
   describe ".decode_bytes" do
     it "decodes with the default alphabet" do
-      BaseX::Base.decode_bytes("ff3300", base_16_alphabet)
+      BaseX::Base.decode("ff3300", base_16_alphabet)
         .should eq(Bytes[255, 51, 0])
     end
 
     it "decodes an empty input" do
-      BaseX::Base.decode_bytes("", base_16_alphabet).should eq(Bytes[0])
+      BaseX::Base.decode("", base_16_alphabet).should eq(Bytes[0])
     end
   end
 

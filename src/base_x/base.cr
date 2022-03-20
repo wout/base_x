@@ -2,6 +2,8 @@ module BaseX
   module Base
     extend self
 
+    BASE = nil
+
     # Converts bytes to a base-x string.
     def encode(
       bytes : Bytes,
@@ -25,7 +27,7 @@ module BaseX
       int : Number,
       alphabet : String
     ) : String
-      base = alphabet.size.to_big_i
+      base = BASE || alphabet.size
 
       String.build do |str|
         while int >= base
@@ -37,27 +39,29 @@ module BaseX
       end.reverse
     end
 
-    # Converts a base-x string to bytes.
-    def decode_bytes(
-      str : String,
-      alphabet : String
-    ) : Bytes
-      zeroes = str.chars.index { |c| c != alphabet[0] } || str.size - 1
+    {% for method in %w[decode decode_bytes] %}
+      # Converts a base-x string to bytes.
+      def {{method.id}}(
+        str : String,
+        alphabet : String
+      ) : Bytes
+        zeroes = str.chars.index { |c| c != alphabet[0] } || str.size - 1
 
-      String.build do |io|
-        zeroes.times { io << "00" } if zeroes.positive?
-        hex = decode_int(str, alphabet).to_s(16)
-        io << '0' if hex.size.odd?
-        io << hex
-      end.hexbytes
-    end
+        String.build do |io|
+          zeroes.times { io << "00" } if zeroes.positive?
+          hex = decode_int(str, alphabet).to_s(16)
+          io << '0' if hex.size.odd?
+          io << hex
+        end.hexbytes
+      end
+    {% end %}
 
     # Converts a base-x string to a base10 integer.
     def decode_int(
       str : String,
       alphabet : String
     ) : BigInt
-      base = alphabet.size.to_big_i
+      base = (BASE || alphabet.size).to_big_i
 
       str.reverse.chars.map_with_index do |char, index|
         unless char_index = alphabet.index(char)
@@ -73,7 +77,7 @@ module BaseX
     module {{base.titleize.id}}
       extend self
 
-      # BASE = {{alphabets[:default].size}} <= benchmark speed improvement
+      BASE = {{alphabets[:default].size}}
       {% for name, alphabet in alphabets %}
         {{name.upcase.id}} = {{alphabet}}
       {% end %}
