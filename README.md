@@ -123,5 +123,5 @@ This will automatically:
 ## Acknowledgements
 This shard pulls inpiration from the following projects:
 - [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x)
-- [dougal/base_x](https://github.com/dougal/base_x)
-- [russ/base_x](https://github.com/russ/base_x)
+- [dougal/base58](https://github.com/dougal/base58)
+- [russ/base58](https://github.com/russ/base58)
