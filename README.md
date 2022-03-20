@@ -55,10 +55,12 @@ or:
 
 ```crystal
 BaseX::Base45.decode("5R%/+F5SZ6LLW+J60D")
-# => 71497501908815312095760606038
-BaseX::Base45.encode(BigInt.new("71497501908815312095760606038"))
+# => Bytes[231, 5, 88, 240, 215, 89, 21, 180, 87, 179, 227, 86]
+BaseX::Base45.encode(Bytes[231, 5, 88, 240, 215, 89, 21, 180, 87, 179, 227, 86])
 # => "5R%/+F5SZ6LLW+J60D"
 ```
+
+**Note**: `BaseX::Base58.decode` is the same as `BaseX::Base58.decode_bytes`.
 
 ### Converting integers
 
@@ -68,8 +70,6 @@ BaseX::Base58.decode_int("6hKMCS")
 BaseX::Base58.encode(3471391110)
 # => "6hKMCS"
 ```
-
-**Note**: `BaseX::Base58.decode` is the same as `BaseX::Base58.decode_bytes`.
 
 ### Using other alphabets
 
