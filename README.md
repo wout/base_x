@@ -75,17 +75,17 @@ BaseX::Base58.encode(3471391110)
 
 ```crystal
 base_16_alphabet = "0123456789abcdef"
-BaseX::Base.decode("ff3300", base_16_alphabet)
+BaseX.decode("ff3300", base_16_alphabet)
 # => Bytes[255, 51, 0]
-BaseX::Base.encode(Bytes[255, 51, 0], base_16_alphabet)
+BaseX.encode(Bytes[255, 51, 0], base_16_alphabet)
 # => "ff3300"
 ```
 
 ### Leading zeroes
 
 Some protocols, such as Bitcoin, require leading zeros to be encoded. Passing
-`true` to the third argument of `BaseX::Bytes.encode` or
-`BaseX::Binary.encode` will enable this behaviour.
+`true` to the third argument of `BaseX::Base58.encode` will enable this
+behaviour.
 
 ```crystal
 bitcoin_address_hex = "00000000000000000000123456789ABCDEF0"

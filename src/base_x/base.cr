@@ -1,45 +1,44 @@
 module BaseX
-  module Base
-    extend self
+  extend self
 
-    BASE = nil
+  BASE = nil
 
-    # Converts bytes to a base-x string.
-    def encode(
-      bytes : Bytes,
-      alphabet : String,
-      leading_zeroes = true
-    ) : String
-      return encode(0, alphabet) if bytes.empty?
+  # Converts bytes to a base-x string.
+  def encode(
+    bytes : Bytes,
+    alphabet : String,
+    leading_zeroes = true
+  ) : String
+    return encode(0, alphabet) if bytes.empty?
 
-      String.build do |io|
-        if leading_zeroes
-          (bytes.index(&.positive?) || bytes.size - 1)
-            .times { io << alphabet[0] }
-        end
-
-        io << encode(bytes.hexstring.to_big_i(16), alphabet)
+    String.build do |io|
+      if leading_zeroes
+        (bytes.index(&.positive?) || bytes.size - 1)
+          .times { io << alphabet[0] }
       end
+
+      io << encode(bytes.hexstring.to_big_i(16), alphabet)
     end
+  end
 
-    # Converts a base10 integer to a base-x string.
-    def encode(
-      int : Number,
-      alphabet : String
-    ) : String
-      base = BASE || alphabet.size
+  # Converts a base10 integer to a base-x string.
+  def encode(
+    int : Number,
+    alphabet : String
+  ) : String
+    base = BASE || alphabet.size
 
-      String.build do |str|
-        while int >= base
-          mod = int % base
-          str << alphabet[mod.to_big_i, 1]
-          int = (int - mod).divmod(base).first
-        end
-        str << alphabet[int.to_big_i, 1]
-      end.reverse
-    end
+    String.build do |str|
+      while int >= base
+        mod = int % base
+        str << alphabet[mod.to_big_i, 1]
+        int = (int - mod).divmod(base).first
+      end
+      str << alphabet[int.to_big_i, 1]
+    end.reverse
+  end
 
-    {% for method in %w[decode decode_bytes] %}
+  {% for method in %w[decode decode_bytes] %}
       # Converts a base-x string to bytes.
       def {{method.id}}(
         str : String,
@@ -56,21 +55,20 @@ module BaseX
       end
     {% end %}
 
-    # Converts a base-x string to a base10 integer.
-    def decode_int(
-      str : String,
-      alphabet : String
-    ) : BigInt
-      base = (BASE || alphabet.size).to_big_i
+  # Converts a base-x string to a base10 integer.
+  def decode_int(
+    str : String,
+    alphabet : String
+  ) : BigInt
+    base = (BASE || alphabet.size).to_big_i
 
-      str.reverse.chars.map_with_index do |char, index|
-        unless char_index = alphabet.index(char)
-          raise DecodingError.new("Value is not a valid Base#{base} String")
-        end
+    str.reverse.chars.map_with_index do |char, index|
+      unless char_index = alphabet.index(char)
+        raise DecodingError.new("Value is not a valid Base#{base} String")
+      end
 
-        char_index.to_big_i * (base ** index)
-      end.sum
-    end
+      char_index.to_big_i * (base ** index)
+    end.sum
   end
 
   {% for base, alphabets in BaseX.annotation(Alphabets).named_args %}
@@ -87,14 +85,14 @@ module BaseX
         alphabet = DEFAULT,
         leading_zeroes = true
       ) : String
-        BaseX::Base.encode(bytes, alphabet, leading_zeroes)
+        BaseX.encode(bytes, alphabet, leading_zeroes)
       end
 
       def encode(
         int : Number,
         alphabet = DEFAULT
       ) : String
-        BaseX::Base.encode(int, alphabet)
+        BaseX.encode(int, alphabet)
       end
 
       {% for method in %w[decode decode_bytes] %}
@@ -102,7 +100,7 @@ module BaseX
           str : String,
           alphabet = DEFAULT
         ) : Bytes
-          BaseX::Base.decode_bytes(str, alphabet)
+          BaseX.decode_bytes(str, alphabet)
         end
       {% end %}
 
@@ -110,7 +108,7 @@ module BaseX
         str : String,
         alphabet = DEFAULT
       ) : BigInt
-        BaseX::Base.decode_int(str, alphabet)
+        BaseX.decode_int(str, alphabet)
       end
     end
   {% end %}
