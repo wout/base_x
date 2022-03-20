@@ -60,7 +60,7 @@ BaseX::Base45.encode(Bytes[231, 5, 88, 240, 215, 89, 21, 180, 87, 179, 227, 86])
 # => "5R%/+F5SZ6LLW+J60D"
 ```
 
-**Note**: `BaseX::Base58.decode` is the same as `BaseX::Base58.decode_bytes`.
+**Note**: `BaseX::BaseXX.decode` is the same as `BaseX::BaseXX.decode_bytes`.
 
 ### Converting integers
 
