@@ -42,21 +42,30 @@ dependencies:
 require "base_x"
 ```
 
-### Converting integers
-
-```crystal
-BaseX::Base58.decode_int("6hKMCS")
-# => 3471391110
-BaseX::Base58.encode(3471391110)
-# => "6hKMCS"
-```
-
 ### Converting bytes
 
 ```crystal
 BaseX::Base58.decode("6hKMCS")
 # => Bytes[206, 233, 57, 134]
 BaseX::Base58.encode(Bytes[206, 233, 57, 134])
+# => "6hKMCS"
+```
+
+or:
+
+```crystal
+BaseX::Base45.decode("5R%/+F5SZ6LLW+J60D")
+# => 71497501908815312095760606038
+BaseX::Base45.encode(BigInt.new("71497501908815312095760606038"))
+# => "5R%/+F5SZ6LLW+J60D"
+```
+
+### Converting integers
+
+```crystal
+BaseX::Base58.decode_int("6hKMCS")
+# => 3471391110
+BaseX::Base58.encode(3471391110)
 # => "6hKMCS"
 ```
 
