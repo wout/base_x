@@ -1,13 +1,12 @@
 module BaseX
   extend self
 
-  BASE = nil
-
   # Converts bytes to a base-x string.
   def encode(
     bytes : Bytes,
     alphabet : String,
-    leading_zeroes = true
+    leading_zeroes = true,
+    base = alphabet.size
   ) : String
     return encode(0, alphabet) if bytes.empty?
 
@@ -17,17 +16,16 @@ module BaseX
           .times { io << alphabet[0] }
       end
 
-      io << encode(bytes.hexstring.to_big_i(16), alphabet)
+      io << encode(bytes.hexstring.to_big_i(16), alphabet, base: base)
     end
   end
 
   # Converts a base10 integer to a base-x string.
   def encode(
     int : Number,
-    alphabet : String
+    alphabet : String,
+    base = alphabet.size
   ) : String
-    base = BASE || alphabet.size
-
     String.build do |str|
       while int >= base
         mod = int % base
@@ -42,13 +40,14 @@ module BaseX
       # Converts a base-x string to bytes.
       def {{method.id}}(
         str : String,
-        alphabet : String
+        alphabet : String,
+        base = alphabet.size
       ) : Bytes
         zeroes = str.chars.index { |c| c != alphabet[0] } || str.size - 1
 
         String.build do |io|
           zeroes.times { io << "00" } if zeroes.positive?
-          hex = decode_int(str, alphabet).to_s(16)
+          hex = decode_int(str, alphabet, base: base).to_s(16)
           io << '0' if hex.size.odd?
           io << hex
         end.hexbytes
@@ -58,9 +57,10 @@ module BaseX
   # Converts a base-x string to a base10 integer.
   def decode_int(
     str : String,
-    alphabet : String
+    alphabet : String,
+    base = alphabet.size
   ) : BigInt
-    base = (BASE || alphabet.size).to_big_i
+    base = base.to_big_i
 
     str.reverse.chars.map_with_index do |char, index|
       unless char_index = alphabet.index(char)
@@ -75,24 +75,25 @@ module BaseX
     module {{base.titleize.id}}
       extend self
 
-      BASE = {{alphabets[:default].size}}
       {% for name, alphabet in alphabets %}
         {{name.upcase.id}} = {{alphabet}}
       {% end %}
+
+      {% alphabet_size = alphabets[:default].size %}
 
       def encode(
         bytes : Bytes,
         alphabet = DEFAULT,
         leading_zeroes = true
       ) : String
-        BaseX.encode(bytes, alphabet, leading_zeroes)
+        BaseX.encode(bytes, alphabet, leading_zeroes, {{alphabet_size}})
       end
 
       def encode(
         int : Number,
         alphabet = DEFAULT
       ) : String
-        BaseX.encode(int, alphabet)
+        BaseX.encode(int, alphabet, {{alphabet_size}})
       end
 
       {% for method in %w[decode decode_bytes] %}
@@ -100,7 +101,7 @@ module BaseX
           str : String,
           alphabet = DEFAULT
         ) : Bytes
-          BaseX.decode_bytes(str, alphabet)
+          BaseX.decode_bytes(str, alphabet, {{alphabet_size}})
         end
       {% end %}
 
@@ -108,7 +109,7 @@ module BaseX
         str : String,
         alphabet = DEFAULT
       ) : BigInt
-        BaseX.decode_int(str, alphabet)
+        BaseX.decode_int(str, alphabet, {{alphabet_size}})
       end
     end
   {% end %}
