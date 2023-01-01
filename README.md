@@ -5,7 +5,7 @@ bitcoin-style leading zero compression.
 
 ![GitHub](https://img.shields.io/github/license/wout/base_x)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/base_x)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wout/base_x/BaseX%20CI)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wout/base_x/ci.yml?branch=main)
 
 ## Supported alphabets
 
