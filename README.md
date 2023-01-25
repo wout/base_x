@@ -1,6 +1,6 @@
 # BaseX
 
-A Crystal shard for base encoding / decoding of any given alphabet with optional
+A Crystal shard for base encoding/decoding of any given alphabet with optional
 bitcoin-style leading zero compression.
 
 ![GitHub](https://img.shields.io/github/license/wout/base_x)
@@ -105,8 +105,8 @@ $ guardian
 
 This will automatically:
 - run ameba for src and spec files
-- run the relevant spec for any file in src
-- run spec file whenever they are saved
+- run the relevant spec for any file in the src dir
+- run spec a file whenever it's saved
 
 ## Contributing
 
@@ -120,8 +120,8 @@ This will automatically:
 
 - [Wout](https://github.com/wout) - creator and maintainer
 
-## Acknowledgements
-This shard pulls inpiration from the following projects:
+## Acknowledgments
+This shard pulls inspiration from the following projects:
 - [cryptocoinjs/base-x](https://github.com/cryptocoinjs/base-x)
 - [dougal/base58](https://github.com/dougal/base58)
 - [russ/base58](https://github.com/russ/base58)
