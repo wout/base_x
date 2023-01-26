@@ -7,6 +7,14 @@ bitcoin-style leading zero compression.
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/wout/base_x)
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wout/base_x/ci.yml?branch=main)
 
+## A note on performance
+
+Because this library also decodes to integers, it relies on `BigInt`, which
+implies a significant performance impact. If you are looking to decode/encode
+base58 and you don't need to decode to integers,
+[wyhaines/base58.cr](https://github.com/wyhaines/base58.cr) is a better
+alternative as it's a lot faster.
+
 ## Supported alphabets
 
 Base | Alphabet
