@@ -14,7 +14,6 @@ jobs:
         shard_file:
           - shard.yml
         crystal_version:
-          - 1.4.0
           - latest
         experimental:
           - false
@@ -38,7 +37,6 @@ jobs:
         shard_file:
           - shard.yml
         crystal_version:
-          - 1.4.0
           - latest
         experimental:
           - false
